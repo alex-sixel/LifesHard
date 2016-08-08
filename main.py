@@ -6,14 +6,17 @@ import glob
 
 
 # Verifica se existem diretorios e planilhas
-# TODO: implementar funcao para receber um diretorio e verificar se existem em todas as sub pastas, planilhas, etc
-def check_dir_and_file():
-   resultDir = os.path.isdir('C:\\Users\\Sixel1\\Desktop\\Python Excel\\5. Power')
+# TODO: implementar uma funçao que verifica se a pasta existe (ex 5. Power) e returna true or false
+# TODO: implementar uma função que verifica se existe uma planilha dentro de uma pasta
+# TODO]: implementar uma função que verifica abre esta planilha e valida o conteúdo dentro dela (ONGOING)
+
+def check_dir_and_file(address, folder_to_check ):
+   resultDir = os.path.isdir(address,'\\',folder_to_check)
    # if true (diretorio existe)
    if resultDir:
       print("\nDirectory exists: ", resultDir)
 
-      resultFile = glob.glob('C:\\Users\\Sixel1\\Desktop\\Python Excel\\5. Power\\*.xlsx')
+      resultFile = glob.glob(address,'\\',folder_to_check,'\\*.xlsx')
 
       # if true (arquivos existem)
       if resultFile:
