@@ -3,7 +3,7 @@ from openpyxl import *
 from collections import *
 import os
 import glob
-import functions
+from functions import *
 
 
 def main():
@@ -16,7 +16,7 @@ def main():
    address = sheet_ranges['B14'].value
    print("Target Address: ", address)
 
-   # passa dados para realizar a verificação com a planilha target*/
+   # passa dados para realizar a verificação com a planilha target
    resultPower = check_power(address, SWV_source)
 
    # Matriz é sempre declarada em linhas
