@@ -17,28 +17,29 @@ def check_dir(address):
 # TODO: implementar uma função que verifica se existe uma planilha dentro de uma pasta (REVER!!)
 def file_exists(address):
 
-   new_address = address,'\\*.xlsx'
+   new_address = address + '\\*.xlsx'
 
    #retorna lista de arquivos .xlsx
    result_file = glob.glob(new_address)
 
    if result_file:
+      #retorna lista
       return result_file
    else:
-      print(".xlsx not found at: ", result_file)
+      print(".xlsx not found at: ", address)
       return False
 
 # TODO: implementar uma função que verifica abre esta planilha e valida o conteúdo dentro dela (ONGOING)
 # address = endereco onde as pastas estao; SWV_source = versao de SW
 def check_power(address, SWV):
 
-   pwr_address = address,'\\5. Power'
+   pwr_address = address + '\\5. Power'
 
    if check_dir(pwr_address):
       #tentativa de tratar vetor como string
       result_file = file_exists(pwr_address)
       if result_file:
-         pwr_address = address + result_file
+         pwr_address = result_file[0]
 
          # abre o arquivo de acordo com o endereço passado
          wb = load_workbook(filename=pwr_address, data_only=True)
