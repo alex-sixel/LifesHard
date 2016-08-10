@@ -18,7 +18,8 @@ def check_dir(address):
 def file_exists(address):
 
    new_address = address,'\\*.xlsx'
-   #resultFile = glob.glob(address,'\\','*.xlsx')
+
+   #retorna lista de arquivos .xlsx
    result_file = glob.glob(new_address)
 
    if result_file:
