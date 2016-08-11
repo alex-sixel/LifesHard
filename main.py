@@ -8,7 +8,7 @@ from functions import *
 
 def main():
    # carrega arquivo de referencia e pega os dados especificos
-   wb = load_workbook(filename='C:\\Users\\Sixel1\\Desktop\\Python Excel\\Data.xlsx')
+   wb = load_workbook(filename='C:\\Users\\alexandre.rodrigues.LGE\\Desktop\\Proposta_Inovação\\Python Excel\\Data.xlsx')
    sheet_ranges = wb.get_sheet_by_name(name='Sheet1')
 
    # pega valores da planilha source
