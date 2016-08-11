@@ -8,13 +8,13 @@ import glob
 def check_dir(address):
 
    if address:
-      print("\nDirectory exists: ", address)
+     #print("\nDirectory exists: ", address)
       return True
    else:
       return False
 
 
-# TODO: implementar uma função que verifica se existe uma planilha dentro de uma pasta (REVER!!)
+# Retorna lista de arquivos .xlsx dentro do endereço recebido
 def file_exists(address):
 
    new_address = address + '\\*.xlsx'
@@ -29,7 +29,11 @@ def file_exists(address):
       print(".xlsx not found at: ", address)
       return False
 
-# TODO: implementar uma função que verifica abre esta planilha e valida o conteúdo dentro dela (ONGOING)
+# TODO: IMPLEMENTAR
+def check_pri():
+   return True
+
+# TODO: IMPLEMENTAR COMPARAÇÃO COM PREVIOUS
 # address = endereco onde as pastas estao; SWV_source = versao de SW
 def check_power(address, SWV):
 
@@ -64,3 +68,7 @@ def check_power(address, SWV):
          else:
             return "Fail: SW Version does not match!"
 
+# TODO: IMPLEMENTAR
+# Procurar pela coluna 'Status', verificar se todas as células estão fechadas; Procurar pela coluna 'Model' e ver se é o mesmo modelo
+def check_td():
+   return   True
