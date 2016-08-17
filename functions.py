@@ -1,5 +1,6 @@
 from array import *
 from openpyxl import *
+from openpyxl.cell import *
 from collections import *
 import os
 import glob
@@ -69,6 +70,39 @@ def check_power(address, SWV):
             return "Fail: SW Version does not match!"
 
 # TODO: IMPLEMENTAR
-# Procurar pela coluna 'Status', verificar se todas as células estão fechadas; Procurar pela coluna 'Model' e ver se é o mesmo modelo
-def check_td():
-   return   True
+# Procurar pela coluna 'Status', verificar se todas as células estão fechadas; Procurar pela coluna 'Model' e ver se é o mesmo modelo (OK)
+# address = endereco onde as pastas estao;
+def check_td(address):
+
+   td_folder = address + '\\8. TD Defect Report'
+
+   if check_dir(td_folder):
+      file_list = file_exists(td_folder)
+      if file_list:
+         # file_list[0] = primeiro arquivo encontrado
+         td_file = file_list[0]
+
+         # abre o arquivo de acordo com o endereço passado
+         wb = load_workbook(filename=td_file, data_only=True)
+         current_sheet = wb.get_sheet_by_name(name='Sheet1')
+
+         col_range = current_sheet['A1:AJ1']
+         #percore a linha1
+         for row in col_range:
+            # Percorre colunaX, até achar o valor "Status"
+            for cell in row:
+               #print("At ", cell.column, cell.row, " cell value is: ", cell.value)
+               if cell.value == "Status":
+                  print("Cell value: ", cell.value)
+
+                  col_index = column_index_from_string(cell.column)
+
+                  for cell_status in current_sheet.columns[col_index-1]:
+                     # TODO: ** INSERIR ANY AQUI **
+                     if(cell_status.value == "Status" or cell_status.value == "Closed" or cell_status.value == "Closed.Not a bug" or cell_status.value == "Closed.Withdrawn" or cell_status.value == "Closed.Deferred"):
+                        print("Within Col Status: ", cell_status.value)
+                     else:
+                        print("Error! not all issues are properly closed!")
+                        return "Fail"
+                  print("All good!")
+                  return "Pass"
