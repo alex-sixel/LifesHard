@@ -18,10 +18,11 @@ def main():
 
    # passa dados para realizar a verificação com a planilha target
    resultPower = check_power(address, SWV_source)
+   result_td = check_td(address)
 
    # Matriz é sempre declarada em linhas
    ArrayList = [['1. FT - ', 'Pass'], ['2. PRI - ', 'Fail'], ['3. WDL - ', 'None'], ['4. FOTA - ', 'None'],
-                ['5. POWER - ', resultPower], ['8. TD Defect Report', 'None']]
+                ['5. POWER - ', resultPower], ['8. TD Defect Report - ', result_td]]
 
    print("Result:")
 
