@@ -21,7 +21,7 @@ def main():
    result_td = check_td(address)
 
    # Matriz é sempre declarada em linhas
-   ArrayList = [['1. FT - ', 'Pass'], ['2. PRI - ', 'Fail'], ['3. WDL - ', 'None'], ['4. FOTA - ', 'None'],
+   ArrayList = [['1. FT - ', 'N/A'], ['2. PRI - ', 'N/A'], ['3. WDL - ', 'N/A'], ['4. FOTA - ', 'N/A'],
                 ['5. POWER - ', resultPower], ['8. TD Defect Report - ', result_td]]
 
    print("Result:")
