@@ -70,8 +70,8 @@ def check_power(address, SWV):
             return "Fail: SW Version does not match!"
 
 
-# TODO: IMPLEMENTAR
-# Procurar pela coluna 'Status', verificar se todas as células estão fechadas; Procurar pela coluna 'Model' e ver se é o mesmo modelo (OK)
+
+# Procurar pela coluna 'Status', verificar se todas as células(issues) estão fechadas; Procurar pela coluna 'Model' e ver se todas as celulas pertencem ao mesmo modelo
 # address = endereco onde as pastas estao;
 def check_td(address):
    td_folder = address + '\\8. TD Defect Report'
@@ -103,18 +103,17 @@ def check_td(address):
                         return "Fail"
 
 
-#########################              REFAZER         ###################
          for alt_row in current_sheet['A1:AJ1']:
             # Percorre a coluna, até achar o valor "Model"
             for cell in alt_row:
                if cell.value == "Model":
+                  print("Model is at: ", cell.column, cell.row)
                   col_index = column_index_from_string(cell.column)
 
+                  # valor fixo usado como referência para comparação (pega primeiro nome de modelo e compara com os subsequentes)
+                  model_name = cell.offset(1, 0)
+
                   for cell_value in current_sheet.columns[col_index - 1]:
-                     # valor fixo usado como referência para comparação (pega primeiro nome de modelo e compara com os subsequentes)
-                     #.offset() desloca para uma outra celula, a partir da celula atual
-                     #procurar alternativa
-                     model_name = cell.offset(1, col_index)
                      if model_name.value != cell_value.value:
                         if cell_value.value == "Model":
                            print("")
