@@ -14,21 +14,39 @@ def check_dir(address):
    else:
       return False
 
-
+# TODO: pegar arquivos .xlsm também
 # Retorna lista de arquivos .xlsx dentro do endereço recebido
 def file_exists(address):
    new_address = address + '\\*.xlsx'
+   new_addres_xlsm = address + '\\*.xlsm'
 
    # retorna lista de arquivos .xlsx
    result_file = glob.glob(new_address)
+   result_file.append(glob.glob(new_addres_xlsm))
 
    if result_file:
       # retorna lista
       return result_file
    else:
-      print(".xlsx not found at: ", address)
+      print(".xlsx or .xlsm not found at: ", address)
       return False
 
+
+# TODO terminar
+# Dar prioridade à global checklist
+# Verificar possiveis problemas por conta de ter checklists personalizadas dependendo do país
+# Exemplo: http://collab.lge.com/main/display/SCAPVG/Mexico
+def check_ft(address):
+
+   ft_address = address + '\\1. FT'
+
+   if check_dir(ft_address):
+      # pega lista de arquivos .xlsx
+      result_file = file_exists(ft_address)
+
+
+
+   return "Pass"
 
 # TODO: Inserir regra para REJUDGMENT
 # TODO: Fazer uma maneira para retornar todos os fails ao invés de um só
