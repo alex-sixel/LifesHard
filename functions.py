@@ -48,6 +48,7 @@ def check_ft(address):
 
    return "Pass"
 
+
 # TODO: Inserir regra para REJUDGMENT
 # TODO: Fazer uma maneira para retornar todos os fails ao invés de um só
 # address = endereco onde as pastas estao; SWV = versao de SW
