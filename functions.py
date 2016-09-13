@@ -14,6 +14,7 @@ def check_dir(address):
    else:
       return False
 
+
 # TODO: pegar arquivos .xlsm também
 # Retorna lista de arquivos .xlsx dentro do endereço recebido
 def file_exists(address):
@@ -28,6 +29,7 @@ def file_exists(address):
       # retorna lista
       return result_file
    else:
+      #TODO: CASO TENHA .XLS ou outra extensao, da ERRO!
       print(".xlsx or .xlsm not found at: ", address)
       return False
 
@@ -37,26 +39,24 @@ def file_exists(address):
 # Verificar possiveis problemas por conta de ter checklists personalizadas dependendo do país
 # Exemplo: http://collab.lge.com/main/display/SCAPVG/Mexico
 def check_ft(address):
-
    ft_address = address + '\\1. FT'
 
    if check_dir(ft_address):
-      # pega lista de arquivos .xlsx
+      # pega lista de arquivos .xlsx ou xslxm
       result_file = file_exists(ft_address)
-
-
+      # procurar nesta lista se tem a Global Checklist incluida
 
    return "Pass"
 
 
 # TODO: Inserir regra para REJUDGMENT
-# TODO: Fazer uma maneira para retornar todos os fails ao invés de um só
 # address = endereco onde as pastas estao; SWV = versao de SW
 def check_pri(address, SWV, model, suffix):
    pri_address = address + '\\2. PRI_SIM_LOCK'
 
+   lista_resultado = []
    if check_dir(pri_address):
-      #pega lista de arquivos .xlsx
+      # pega lista de arquivos .xlsx
       result_file = file_exists(pri_address)
 
       if result_file:
@@ -67,15 +67,17 @@ def check_pri(address, SWV, model, suffix):
 
          sheet_list = wb.sheetnames
 
-         #abre a primeira planilha com o resultado principal
+         # abre a primeira planilha com o resultado principal
          work_sheet = wb.get_sheet_by_name(name=sheet_list[0])
 
          if work_sheet['C2'].value == suffix:
             if work_sheet['C4'].value == SWV:
-               #Para caso de Rejudgment, procura na celula adjacente F6
+               # Para caso de Rejudgment, procura na celula adjacente F6
                if work_sheet['C6'].value == "OK" or work_sheet['F6'].value == "OK" or work_sheet['F6'].value == "ok":
-                  if work_sheet['F10'].value == "OK" or work_sheet['F6'].value == "OK" or work_sheet['F6'].value == "ok":
-                     if work_sheet['F11'].value == "OK" or work_sheet['F6'].value == "OK" or work_sheet['F6'].value == "ok":
+                  if work_sheet['F10'].value == "OK" or work_sheet['F6'].value == "OK" or work_sheet[
+                     'F6'].value == "ok":
+                     if work_sheet['F11'].value == "OK" or work_sheet['F6'].value == "OK" or work_sheet[
+                        'F6'].value == "ok":
 
                         # Campo de resultados está aparentemente OK
                         # Verificação da planilha de sim lock
@@ -83,50 +85,54 @@ def check_pri(address, SWV, model, suffix):
                         if work_sheet['C5'].value == "OK":
                            if work_sheet['C10'].value == SWV:
                               if work_sheet['F17'].value == "PASS":
-                                 #percorre todas as celulas em E em busca de algum resultado fail ou NG
+                                 # percorre todas as celulas em E em busca de algum resultado fail ou NG
                                  col = work_sheet.columns[4]
 
                                  for cell_value in col:
                                     if cell_value.value == "FAIL" or cell_value.value == "Fail" or cell_value.value == "fail":
-                                       return "FAIL at: ", sheet_list[-2], " Fail found at", cell_value.column, cell_value.row
+                                       lista_resultado.append("FAIL at: " + sheet_list[-2] + " Fail found at" +
+                                                              cell_value.column + cell_value.row)
 
                                  # percorre todas as celulas em F em busca de algum resultado fail ou NG
                                  col = work_sheet.columns[5]
                                  for cell_value in col:
                                     if cell_value.value == "FAIL" or cell_value.value == "Fail" or cell_value.value == "fail":
-                                       return "FAIL at: ", sheet_list[-2], " Fail found at", cell_value.column, cell_value.row
+                                       lista_resultado.append("FAIL at: " + sheet_list[-2] + " Fail found at" +
+                                                              cell_value.column + cell_value.row)
 
                                  # para ter acesso ao restante das planilhas que ainda não foram verificadas
-                                 new_sheet_list = sheet_list[1:len(sheet_list)-2]
+                                 new_sheet_list = sheet_list[1:len(sheet_list) - 2]
 
                                  for sheet in new_sheet_list:
                                     work_sheet = wb.get_sheet_by_name(name=sheet)
-                                    col = work_sheet.columns[5] #Coluna 'F'
+                                    col = work_sheet.columns[5]  # Coluna 'F'
 
                                     for cell_value in col:
-                                       if cell_value.value == "Failed" or  cell_value.value == "Fail" or cell_value.value == "NG":
-                                          #TODO: Inserir regra para REJUDGMENT
-                                          return "FAIL at: " + sheet + ". Correct it and rerun to check for more errors"
+                                       if cell_value.value == "Failed" or cell_value.value == "Fail" or cell_value.value == "NG":
+                                          # TODO: Inserir regra para REJUDGMENT
+                                          lista_resultado.append("FAIL at: " + sheet + ". Correct it or Rejudge it")
 
                               else:
-                                 return "FAIL at: ", sheet_list[-2], " Fail found at[F17]"
+                                 lista_resultado.append("FAIL at: " + sheet_list[-2] + " Fail found at[F17]")
                            else:
-                              return "FAIL at: ", sheet_list[-2], " check SWV[C10]"
+                              lista_resultado.append("FAIL at: " + sheet_list[-2] + " check SWV[C10]")
                         else:
-                           return "FAIL at: ", sheet_list[-2], " Result Field[C5]"
+                           lista_resultado.append("FAIL at: " + sheet_list[-2] + " Result Field[C5]")
 
-                        return "Pass"
+                        # Else, if lista vazia, retorna Pass
+                        if not lista_resultado:
+                           lista_resultado.append("Pass")
                      else:
-                        return "FAIL SIM Lock Tests found at " + sheet_list[0]
+                        lista_resultado.append("FAIL SIM Lock Tests found at " + sheet_list[0])
                   else:
-                     return "FAIL Confirmation Result found at " + sheet_list[0]
+                     lista_resultado.append("FAIL Confirmation Result found at " + sheet_list[0])
                else:
-                  return "FAIL - Result NG found at " + sheet_list[0]
+                  lista_resultado.append("FAIL - Result NG found at " + sheet_list[0])
             else:
-               return "FAIL - WRONG SWV found at " + sheet_list[0]
+               lista_resultado.append("FAIL - WRONG SWV found at " + sheet_list[0])
          else:
-            return "FAIL - WRONG Suffix found at " + sheet_list[0]
-
+            lista_resultado.append("FAIL - WRONG Suffix found at " + sheet_list[0])
+   return lista_resultado
 
 # TODO: IMPLEMENTAR COMPARAÇÃO COM PREVIOUS
 # address = endereco onde as pastas estao; SWV = versao de SW
@@ -163,7 +169,6 @@ def check_power(address, SWV):
             return "Fail: SW Version does not match!"
 
 
-
 # Procurar pela coluna 'Status', verificar se todas as células(issues) estão fechadas; Procurar pela coluna 'Model' e ver se todas as celulas pertencem ao mesmo modelo
 # address = endereco onde as pastas estao;
 def check_td(address):
@@ -195,7 +200,6 @@ def check_td(address):
                         print("Error: Not all issues are properly closed! - ", cell_status.value)
                         return "Fail"
 
-
          for alt_row in current_sheet['A1:AJ1']:
             # Percorre a coluna, até achar o valor "Model"
             for cell in alt_row:
@@ -215,5 +219,5 @@ def check_td(address):
                                  cell_value.value, "\n")
                            return "Fail"
 
-         #print("All good!")
+         # print("All good!")
          return "Pass"
