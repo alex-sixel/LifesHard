@@ -26,6 +26,8 @@ def main():
    resultPower = check_power(address, SWV_source)
    result_td = check_td(address)
    result_pri = check_pri(address, SWV_source, model, suffix)
+   result_ft = check_ft(address)
+
    # Matriz é sempre declarada em linhas
    ArrayList = [['1. FT - ', 'N/A'], ['2. PRI - ', result_pri], ['3. WDL - ', 'N/A'], ['4. FOTA - ', 'N/A'],
                 ['5. POWER - ', resultPower], ['8. TD Defect Report - ', result_td]]
